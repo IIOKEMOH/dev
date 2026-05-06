@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org"></script>
+    <style>
+        body { background: #1c1c1c; color: white; font-family: sans-serif; padding: 20px; text-align: center; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: #333; color: white; font-size: 16px; }
+        label { display: block; text-align: left; margin-top: 10px; color: #aaa; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h3>L2 Main Market</h3>
+    
+    <label>Выберите сервер:</label>
+    <select id="server">
+        <option value="Elcardia">Elcardia</option>
+        <option value="Core">Core</option>
+        <option value="Diona">Diona</option>
+    </select>
+
+    <label>Что продаем?</label>
+    <input type="text" id="item" placeholder="Название предмета">
+
+    <label>Укажите цену:</label>
+    <input type="text" id="price" placeholder="Например, 500 L-Coin">
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // Настраиваем главную кнопку снизу экрана
+        tg.MainButton.setParams({
+            text: "ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ",
+            color: "#248b65",
+            text_color: "#ffffff",
+            is_active: true,
+            is_visible: true
+        });
+
+        // Слушаем нажатие на большую кнопку
+        tg.onEvent('mainButtonClicked', function() {
+            const item = document.getElementById("item").value.trim();
+            const price = document.getElementById("price").value.trim();
+            const server = document.getElementById("server").value;
+
+            if (!item || !price) {
+                tg.showAlert("Заполни название и цену!");
+                return;
+            }
+
+            const data = { item, price, server };
+            tg.sendData(JSON.stringify(data)); // Отправка боту
+            tg.close(); // Закрытие окна
+        });
+    </script>
+</body>
+</html>
