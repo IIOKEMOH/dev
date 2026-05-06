@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org"></script>
+    <style>
+        body { background: #1c1c1c; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        select, input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; background: #248b65; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:active { background: #1a6348; }
+    </style>
+</head>
+<body>
+    <h3>Разместить объявление</h3>
+    
+    <select id="server">
+        <option value="Elcardia">Elcardia</option>
+        <option value="Core">Core</option>
+    </select>
+    
+    <input type="text" id="item" placeholder="Название предмета (например, Талисман)">
+    <input type="text" id="price" placeholder="Цена (например, 500L)">
+
+    <button id="main_button">ОПУБЛИКОВАТЬ</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        const btn = document.getElementById('main_button');
+
+        btn.addEventListener('click', () => {
+            const item = document.getElementById('item').value.trim();
+            const price = document.getElementById('price').value.trim();
+            const server = document.getElementById('server').value;
+
+            if (item.length < 2 || price.length < 1) {
+                tg.showAlert("Пожалуйста, заполните все поля!");
+                return;
+            }
+
+            const data = {
+                item: item,
+                price: price,
+                server: server
+            };
+
+            // Отправляем данные боту
+            tg.sendData(JSON.stringify(data));
+            
+            // Закрываем приложение
+            tg.close();
+        });
+    </script>
+</body>
+</html>
